@@ -30,18 +30,3 @@ data/SP500.csv
 - `requirements.txt`: dependencies
 
 ## Run
-```bash
-python main.py
-
-# 3. requirements.txt
-
-Tạo file `requirements.txt`:
-
-```txt
-numpy
-pandas
-matplotlib
-seaborn
-scipy
-scikit-learn
-torch
