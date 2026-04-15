@@ -82,6 +82,23 @@ def plot_density_comparison(real_flat, sample_flat, output_dir="outputs"):
     plt.close()
 
 
+def plot_time_series(real_flat, sample_flat, output_dir="outputs"):
+    ensure_output_dir(output_dir)
+
+    n = len(real_flat)
+    plt.figure(figsize=(12, 5))
+    plt.plot(real_flat, label="Real Data", color="steelblue", linewidth=0.8)
+    plt.plot(sample_flat[:n], label="Generated Data", color="orange",
+             linestyle="--", linewidth=1.2)
+    plt.title("Real vs Generated Time Series")
+    plt.xlabel("Time")
+    plt.ylabel("Value")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f"{output_dir}/time_series.png", dpi=300)
+    plt.close()
+
+
 def plot_kde_comparison(real_flat, sample_flat, output_dir="outputs"):
     ensure_output_dir(output_dir)
 
