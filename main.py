@@ -15,7 +15,8 @@ from evaluate import (
     plot_qq,
     plot_losses,
     plot_density_comparison,
-    plot_kde_comparison
+    plot_kde_comparison,
+    plot_time_series
 )
 
 
@@ -94,6 +95,7 @@ def main():
 
     plot_density_comparison(real_flat, sample_flat)
     plot_kde_comparison(real_flat, sample_flat)
+    plot_time_series(real_flat, sample_flat)
 
     print(f"Final Test Negative Log-Likelihood: {test_nll:.6f}")
     print("All figures have been saved in the outputs/ folder.")
