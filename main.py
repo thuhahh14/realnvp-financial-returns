@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+import pandas as pd
+from scipy.stats import gaussian_kde, norm
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 from data_preprocessing import (
@@ -97,7 +99,22 @@ def main():
 
     print("Loaded SP500 data successfully.")
     print("Number of return observations:", len(returns))
-    print(df.head())
+
+    print("\n" + "=" * 60)
+    print("LAST 5 ROWS OF DATA")
+    print("=" * 60)
+    print(df.tail())
+
+    print("\n" + "=" * 60)
+    print("DESCRIPTIVE STATISTICS")
+    print("=" * 60)
+
+    print("Mean     :", np.mean(returns))
+    print("Std      :", np.std(returns))
+    print("Min      :", np.min(returns))
+    print("Max      :", np.max(returns))
+    print("Skewness :", pd.Series(returns).skew())
+    print("Kurtosis :", pd.Series(returns).kurtosis())
 
     # ── 2. Initial EDA plots ──────────────────
     plot_histogram_kde(returns)
@@ -143,6 +160,34 @@ def main():
 
     real_flat   = X[-len(X_test_std):].reshape(-1)
     sample_flat = samples.reshape(-1)
+    print("\n" + "=" * 60)
+    print("GAUSSIAN vs REALNVP")
+    print("=" * 60)
+
+    x_grid = np.linspace(
+    min(real_flat.min(), sample_flat.min()),
+    max(real_flat.max(), sample_flat.max()),
+    1000
+    )
+
+    real_density = gaussian_kde(real_flat)(x_grid)
+    generated_density = gaussian_kde(sample_flat)(x_grid)
+
+    mu = np.mean(real_flat)
+    sigma = np.std(real_flat)
+
+    gaussian_density = norm.pdf(
+    x_grid,
+    mu,
+    sigma
+    )
+
+    print("Peak Density (Real Data):", real_density.max())
+    print("Peak Density (Gaussian):", gaussian_density.max())
+    print("Peak Density (RealNVP):", generated_density.max())
+
+    print("Variance (Real Data):", np.var(real_flat))
+    print("Variance (RealNVP):", np.var(sample_flat))
 
     plot_density_comparison(real_flat, sample_flat)
     plot_kde_comparison(real_flat, sample_flat)
